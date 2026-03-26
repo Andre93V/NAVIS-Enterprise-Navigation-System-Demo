@@ -8,19 +8,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #f8fafc; --text-color: #0f172a; --card-bg: #ffffff;
-            --border-color: #e2e8f0; --muted-text: #64748b; --header-bg: #f1f5f9;
-            --table-header-bg: #f8fafc; --petronas-cyan: #334155; --petronas-cyan-hover: #1e293b;
-            --badge-bg: #e2e8f0; --badge-text: #334155;
+            --bg-color: #f4f6f8; --text-color: #101820; --card-bg: #ffffff;
+            --border-color: #e0e0e0; --muted-text: #6c757d; --header-bg: #f8f9fa;
+            --table-header-bg: #f1f3f5; --petronas-cyan: #00D2BE; --petronas-cyan-hover: #00b8a6;
+            --badge-bg: #e6f9f7; --badge-text: #008f81;
         }
         [data-theme="dark"] {
-            --bg-color: #0f172a; --text-color: #f8fafc; --card-bg: #1e293b;
-            --border-color: #334155; --muted-text: #94a3b8; --header-bg: #1e293b;
-            --table-header-bg: #0f172a; --badge-bg: #1e3a8a; --badge-text: #38bdf8;
-            --petronas-cyan: #0ea5e9; --petronas-cyan-hover: #38bdf8;
+            --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e;
+            --border-color: #333333; --muted-text: #9aa8b5; --header-bg: #1a1a1a;
+            --table-header-bg: #252525; --badge-bg: #003330; --badge-text: #00D2BE;
+            --petronas-cyan: #00D2BE; --petronas-cyan-hover: #00b8a6;
         }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
-        .navbar { background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); border-bottom: 3px solid var(--petronas-cyan); }
+        .navbar { background: linear-gradient(90deg, #101820 0%, #202c39 100%); border-bottom: 3px solid var(--petronas-cyan); }
         .card { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s; border-top: 4px solid var(--petronas-cyan); }
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.15); }
         .text-muted { color: var(--muted-text) !important; }
@@ -89,46 +89,50 @@
 </head>
 <body>
     <script>
-        if(sessionStorage.getItem('navis_logged_in') !== 'true') { window.location.href = 'login.html'; }
+        if(sessionStorage.getItem('is_logged_in') !== 'true') { window.location.href = 'login.html'; }
         const savedTheme = localStorage.getItem('navis_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 
-    <div class="portfolio-banner">🔴 VISUALIZZAZIONE PORTFOLIO - Demo Interattiva Front-End (Zero Backend) 🔴</div>
+    <div class="portfolio-banner">🔴 VISUALIZZAZIONE PORTFOLIO - DEMO Interattiva Front-End (Zero Backend) 🔴</div>
 
     <nav class="navbar navbar-expand-xl navbar-dark mb-4 px-4 sticky-top" style="z-index: 1040;">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" style="border:none;box-shadow:none;">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="container-fluid d-flex align-items-center p-0">
+            <button class="btn btn-outline-light btn-sm me-3" onclick="window.location.href = 'index.html';" title="Home">
+                <i class="fas fa-home"></i>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navMenu">
-            <div class="d-flex flex-column flex-xl-row gap-1 gap-xl-2 align-items-xl-center mt-3 mt-xl-0" style="font-size: 0.95rem;">
-                <button class="tab-btn active px-2" onclick="switchView('home')" title="Home"><i class="fas fa-home fs-5"></i></button>
-                <div class="vr bg-light mx-1 d-none d-xl-block" style="opacity:0.2;height:20px;"></div>
-                <button class="tab-btn px-1" onclick="showToast('Risorse Umane', 'Da sviluppare')">Risorse Umane</button>
-                <button class="tab-btn px-1" onclick="showToast('Supply Chain', 'Da sviluppare')">Supply Chain</button>
-                <button class="tab-btn px-1" onclick="showToast('Produzione', 'Da sviluppare')">Produzione</button>
-                <button class="tab-btn px-1" onclick="showToast('Controllo Qualità', 'Da sviluppare')">Controllo Qualità</button>
-                <button class="tab-btn px-1" onclick="showToast('Ufficio Tecnico', 'Da sviluppare')">Ufficio Tecnico</button>
-                <button class="tab-btn px-1" onclick="showToast('Sicurezza', 'Da sviluppare')">Sicurezza</button>
-                <button class="tab-btn px-1" onclick="showToast('Amministrazione', 'Da sviluppare')">Amministrazione</button>
-                <button class="tab-btn px-1" onclick="showToast('Ricerca e Sviluppo', 'Da sviluppare')">Ricerca e Sviluppo</button>
-                <button class="tab-btn px-1" onclick="showToast('Contabilità', 'Da sviluppare')">Contabilità</button>
-                <button class="tab-btn px-1" onclick="showToast('Admin', 'Da sviluppare')">Admin</button>
-            </div>
-        </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" style="border:none;box-shadow:none;">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="d-flex align-items-center ms-auto pt-2 pt-xl-0">
-            <div class="text-white d-flex align-items-center me-3" style="font-size:1rem;">
-                <i class="fas fa-user-circle fs-4 me-2" style="color:var(--petronas-cyan)"></i>
-                <span>Admin: <strong>Dummy</strong></span>
-            </div>
-            <div class="d-flex align-items-center gap-3 border-start border-secondary ps-3">
-                <div class="d-flex gap-2">
-                    <button class="btn btn-outline-light btn-sm" onclick="toggleTheme()" title="Cambia Tema"><i class="fas fa-moon" id="theme-icon"></i></button>
-                    <button onclick="logout()" class="btn btn-sm btn-outline-danger fw-bold" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <div class="d-flex flex-column flex-xl-row gap-1 gap-xl-2 align-items-xl-center mt-3 mt-xl-0" style="font-size: 0.95rem;">
+                    <button class="tab-btn px-1" onclick="showToast('Risorse Umane', 'Da sviluppare')">Risorse Umane</button>
+                    <button class="tab-btn px-1" onclick="showToast('Supply Chain', 'Da sviluppare')">Supply Chain</button>
+                    <button class="tab-btn px-1" onclick="showToast('Produzione', 'Da sviluppare')">Produzione</button>
+                    <button class="tab-btn px-1" onclick="showToast('Controllo Qualità', 'Da sviluppare')">Controllo Qualità</button>
+                    <button class="tab-btn px-1" onclick="showToast('Ufficio Tecnico', 'Da sviluppare')">Ufficio Tecnico</button>
+                    <button class="tab-btn px-1" onclick="showToast('Sicurezza', 'Da sviluppare')">Sicurezza</button>
+                    <button class="tab-btn px-1" onclick="showToast('Amministrazione', 'Da sviluppare')">Amministrazione</button>
+                    <button class="tab-btn px-1" onclick="showToast('Ricerca e Sviluppo', 'Da sviluppare')">Ricerca e Sviluppo</button>
+                    <button class="tab-btn px-1" onclick="showToast('Contabilità', 'Da sviluppare')">Contabilità</button>
+                    <button class="tab-btn px-1" onclick="showToast('Admin', 'Da sviluppare')">Admin</button>
                 </div>
-                <span class="navbar-brand mb-0 h4 m-0 fw-bold d-flex align-items-center"><i class="fas fa-compass" style="color:#ffffff;margin-right:6px"></i>NAVIS</span>
+            </div>
+
+            <div class="d-flex align-items-center ms-auto pt-2 pt-xl-0">
+                <div class="text-white d-flex align-items-center me-3" style="font-size:1rem;">
+                    <i class="fas fa-user-circle fs-4 me-2" style="color:var(--petronas-cyan)"></i>
+                    <span>Admin: <strong>Dummy</strong></span>
+                </div>
+                <div class="d-flex align-items-center gap-3 border-start border-secondary ps-3">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-light btn-sm" onclick="toggleTheme()" title="Cambia Tema"><i class="fas fa-moon" id="theme-icon"></i></button>
+                        <button onclick="logout()" class="btn btn-sm btn-outline-danger fw-bold" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                    <span class="navbar-brand mb-0 h4 m-0 fw-bold d-flex align-items-center"><i class="fas fa-compass" style="color:#ffffff;margin-right:6px"></i>NAVIS</span>
+                </div>
             </div>
         </div>
     </nav>
