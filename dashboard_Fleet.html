@@ -115,27 +115,32 @@
 
     <script>
         // Check login e tema iniziale
-        if(sessionStorage.getItem('fleet_logged_in') !== 'true') { window.location.href = 'login.html'; }
+        if(sessionStorage.getItem('is_logged_in') !== 'true') { window.location.href = 'login.html'; }
         const savedTheme = localStorage.getItem('fleet_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 
-    <div class="portfolio-banner">🔴 VISUALIZZAZIONE PORTFOLIO - Demo Interattiva Front-End 🔴</div>
+    <div class="portfolio-banner">🔴 VISUALIZZAZIONE PORTFOLIO - DEMO Interattiva Front-End 🔴</div>
 
-    <nav class="navbar navbar-dark mb-4 px-3 d-flex justify-content-between align-items-center">
-        <span class="navbar-brand mb-0 h1"><i class="fas fa-ship" style="color: var(--petronas-cyan); margin-right: 8px;"></i> FLEET MANAGER</span>
-        
-        <div class="d-flex gap-2 align-items-center">
-            <button class="btn btn-outline-light btn-sm" onclick="toggleTheme()" title="Cambia Tema Giorno/Notte">
-                <i class="fas fa-moon" id="theme-icon"></i>
+    <nav class="navbar navbar-dark mb-4 px-4 sticky-top">
+        <div class="container-fluid d-flex align-items-center p-0">
+            <button class="btn btn-outline-light btn-sm me-3" onclick="window.location.href='index.html'" title="Home">
+                <i class="fas fa-home"></i>
             </button>
-            <div class="vr bg-light mx-2" style="opacity: 0.5; height: 20px;"></div>
-            <div class="btn-group" role="group" aria-label="Cambio Vista">
-                <button type="button" class="btn btn-outline-light btn-sm active" id="btn-grid" onclick="switchView('grid')"><i class="fas fa-th-large"></i> Griglia</button>
-                <button type="button" class="btn btn-outline-light btn-sm" id="btn-list" onclick="switchView('list')"><i class="fas fa-list"></i> Tabella</button>
+
+            <div class="btn-group me-auto" role="group">
+                <button type="button" class="btn btn-outline-light btn-sm active" id="btn-grid" onclick="switchView('grid')"><i class="fas fa-th-large me-1"></i> Griglia</button>
+                <button type="button" class="btn btn-outline-light btn-sm" id="btn-list" onclick="switchView('list')"><i class="fas fa-list me-1"></i> Tabella</button>
             </div>
-            <div class="vr bg-light mx-2" style="opacity: 0.5; height: 20px;"></div>
-            <button onclick="logout()" class="btn btn-sm btn-danger fw-bold" title="Logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-light btn-sm" onclick="toggleTheme()" title="Cambia Tema">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+                <button onclick="logout()" class="btn btn-sm btn-outline-danger fw-bold" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                <div class="vr bg-light d-none d-md-block" style="opacity:0.2;height:20px;"></div>
+                <span class="navbar-brand mb-0 h4 m-0 fw-bold d-flex align-items-center"><i class="fas fa-ship" style="color:#ffffff;margin-right:6px"></i>FLEET MANAGER</span>
+            </div>
         </div>
     </nav>
 
@@ -264,7 +269,7 @@
         });
 
         function logout() {
-            sessionStorage.removeItem('fleet_logged_in');
+            sessionStorage.removeItem('is_logged_in');
             window.location.href = 'login.html';
         }
 
