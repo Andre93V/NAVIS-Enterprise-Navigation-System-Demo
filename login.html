@@ -39,7 +39,7 @@
         const savedTheme = localStorage.getItem('navis_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         if(sessionStorage.getItem('navis_logged_in') === 'true') {
-            window.location.href = 'dashboard.html';
+            window.location.href = 'index.html';
         }
     </script>
 
@@ -70,7 +70,7 @@
             const pass = document.getElementById('password').value;
             if (user.trim() !== '' && pass.trim() !== '') {
                 sessionStorage.setItem('navis_logged_in', 'true');
-                window.location.href = 'dashboard.html';
+                window.location.href = 'index.html';
             } else {
                 document.getElementById('error-msg').style.display = 'block';
             }
