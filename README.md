@@ -1,7 +1,6 @@
 <div align="center">
   <h1 style="display: flex; align-items: center; gap: 10px;">
-  <span>🏭</span>
-  <i class="fas fa-compass" style="color: var(--petronas-cyan);"></i> 
+  <span>🏭🧭</span>
   NAVIS
   </h1>
   <h3>Executive Summary &bull; Digitalizzazione e Controllo di Produzione</h3>
