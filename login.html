@@ -7,69 +7,276 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #f8fafc;
+            --bg-color: #f4f6f8;
             --card-bg: white;
-            --text-color: #0f172a;
-            --input-border: #e2e8f0;
-            --petronas-cyan: #334155;
-            --petronas-hover: #1e293b;
-            --muted-text: #64748b;
+            --text-color: #101820;
+            --input-border: #e0e0e0;
+            --petronas-cyan: #00D2BE;
+            --petronas-hover: #00b8a6;
+            --muted-text: #6c757d;
         }
         [data-theme='dark'] {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --input-border: #334155;
-            --petronas-cyan: #0ea5e9;
-            --petronas-hover: #38bdf8;
-            --muted-text: #94a3b8;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --input-border: #333333;
+            --petronas-cyan: #00D2BE;
+            --petronas-hover: #00b8a6;
+            --muted-text: #9aa8b5;
         }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; transition: 0.3s; }
-        .container { background: var(--card-bg); padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 340px; text-align: center; border-top: 4px solid var(--petronas-cyan); transition: 0.3s; }
-        h2 { margin-bottom: 0.5rem; color: var(--text-color); font-weight: 700; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--input-border); border-radius: 6px; box-sizing: border-box; background-color: var(--bg-color); color: var(--text-color); transition: 0.3s; font-size: 15px; }
-        input:focus { outline: none; border-color: var(--petronas-cyan); box-shadow: 0 0 0 3px rgba(0,210,190,0.15); }
-        button { width: 100%; padding: 12px; background-color: var(--petronas-cyan); color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 15px; font-weight: bold; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
-        button:hover { background-color: var(--petronas-hover); transform: translateY(-2px); }
-        .alert { color: #842029; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; display: none; }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: linear-gradient(90deg, #101820 0%, #202c39 100%);
+            border-bottom: 3px solid var(--petronas-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            height: 56px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* Left side — empty on login page, kept for symmetry */
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 80px;
+        }
+
+        /* Right side — controls + brand */
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        /* Small icon-only theme toggle */
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+            flex-shrink: 0;
+            padding: 0;
+        }
+        .btn-icon:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--petronas-cyan);
+            transform: translateY(-1px);
+        }
+
+        /* Vertical divider */
+        .nav-divider {
+            width: 1px;
+            height: 22px;
+            background: rgba(255,255,255,0.18);
+            flex-shrink: 0;
+        }
+
+        /* NAVIS brand */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .navbar-brand .brand-icon {
+            color: var(--petronas-cyan);
+            font-size: 1.2rem;
+        }
+
+        /* ── LOGIN CARD ── */
+        .login-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+            border-top: 4px solid var(--petronas-cyan);
+            transition: background 0.3s;
+        }
+
+        h2 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+            font-size: 15px;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--petronas-cyan);
+            box-shadow: 0 0 0 3px rgba(0,210,190,0.15);
+        }
+
+        /* Scoped to login form only */
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--petronas-cyan);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.15s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+        .login-btn:hover {
+            background-color: var(--petronas-hover);
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            color: #842029;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            padding: 14px 0;
+        }
     </style>
 </head>
 <body>
     <script>
         const savedTheme = localStorage.getItem('navis_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        if(sessionStorage.getItem('navis_logged_in') === 'true') {
+        if (sessionStorage.getItem('is_logged_in') === 'true') {
             window.location.href = 'index.html';
         }
     </script>
 
-    <div class="container">
-        <h2><i class="fas fa-ship" style="color: var(--petronas-cyan); margin-right: 8px;"></i> NAVIS</h2>
-        <p style="font-size: 0.85em; color: var(--muted-text); margin-top: 0; margin-bottom: 20px;">Gestione Industriale — Portfolio Demo</p>
+    <nav class="navbar">
+        <!-- Left: empty placeholder for symmetry -->
+        <div class="navbar-left"></div>
 
-        <div class="alert" id="error-msg">Credenziali errate</div>
+        <!-- Right: theme toggle + divider + brand -->
+        <div class="navbar-right">
+            <button class="btn-icon" onclick="toggleTheme()" title="Cambia Tema">
+                <i id="theme-icon" class="fas fa-moon"></i>
+            </button>
+            <div class="nav-divider"></div>
+            <span class="navbar-brand">
+                <i class="fas fa-compass brand-icon"></i>NAVIS
+            </span>
+        </div>
+    </nav>
 
-        <form id="login-form">
-            <input type="text" id="username" placeholder="Nome Utente" required autofocus value="Dummy">
-            <input type="password" id="password" placeholder="Password (qualsiasi)" required value="demo">
-            <button type="submit"><i class="fas fa-sign-in-alt" style="margin-right:6px"></i>ACCEDI</button>
-        </form>
-        <p style="font-size: 0.75em; color: var(--muted-text); margin-top: 15px;">
-            <i class="fas fa-info-circle"></i> Demo: credenziali pre-compilate, clicca "Accedi"
-        </p>
+    <div class="login-wrapper">
+        <div class="card">
+            <h2>ACCESSO</h2>
+            <p style="font-size:0.85em; color:var(--muted-text); margin-top:0; margin-bottom:20px;">
+                Gestione Industriale — Portfolio Demo
+            </p>
+
+            <div class="alert" id="error-msg">Credenziali errate</div>
+
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Nome Utente" required autofocus value="Dummy">
+                <input type="password" id="password" placeholder="Password (qualsiasi)" required value="demo">
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt" style="margin-right:6px"></i>ACCEDI
+                </button>
+            </form>
+
+            <p style="font-size:0.75em; color:var(--muted-text); margin-top:15px;">
+                <i class="fas fa-info-circle"></i> DEMO: credenziali pre-compilate, clicca "Accedi"
+            </p>
+        </div>
     </div>
 
-    <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; color: #888; font-size: 13px;">
-        &copy; Sviluppato da Emanuele Cazzola e Andrea Volpe - Riproduzione riservata
-    </div>
+    <footer>
+        &copy; Sviluppato da Emanuele Cazzola e Andrea Volpe — Riproduzione riservata
+    </footer>
 
     <script>
+        function toggleTheme() {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const nw = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', nw);
+            localStorage.setItem('navis_theme', nw);
+            updateThemeIcon();
+        }
+        function updateThemeIcon() {
+            const icon = document.getElementById('theme-icon');
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                icon.className = 'fas fa-sun';
+                icon.style.color = '#ffeb3b';
+            } else {
+                icon.className = 'fas fa-moon';
+                icon.style.color = '';
+            }
+        }
+        updateThemeIcon();
+
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
             if (user.trim() !== '' && pass.trim() !== '') {
-                sessionStorage.setItem('navis_logged_in', 'true');
+                sessionStorage.setItem('is_logged_in', 'true');
                 window.location.href = 'index.html';
             } else {
                 document.getElementById('error-msg').style.display = 'block';
