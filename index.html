@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAVIS — Portale di Accesso</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8fafc; --text-color: #0f172a; --card-bg: #ffffff;
+            --border-color: #e2e8f0; --muted-text: #64748b; --header-bg: #f1f5f9;
+            --petronas-cyan: #334155; --petronas-cyan-hover: #1e293b;
+        }
+        [data-theme="dark"] {
+            --bg-color: #0f172a; --text-color: #f8fafc; --card-bg: #1e293b;
+            --border-color: #334155; --muted-text: #94a3b8; --header-bg: #1e293b;
+            --petronas-cyan: #0ea5e9; --petronas-cyan-hover: #38bdf8;
+        }
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Segoe UI', sans-serif; 
+            transition: 0.3s; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .navbar { 
+            background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); 
+            border-bottom: 3px solid var(--petronas-cyan); 
+        }
+        .card { 
+            background-color: var(--card-bg); 
+            color: var(--text-color); 
+            border: 1px solid var(--border-color); 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            transition: transform 0.3s, box-shadow 0.3s; 
+            border-top: 4px solid var(--petronas-cyan); 
+            text-decoration: none; 
+            display: block; 
+        }
+        .card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12); 
+            color: var(--text-color); 
+        }
+        .text-muted { color: var(--muted-text) !important; }
+        .portfolio-banner { 
+            background-color: #f57c00; 
+            color: white; 
+            text-align: center; 
+            padding: 5px; 
+            font-weight: bold; 
+            font-size: 0.9em; 
+        }
+        .module-icon { 
+            font-size: 4.8rem; 
+            color: var(--petronas-cyan); 
+            margin-bottom: 5px; 
+            transition: 0.2s; 
+        }
+        .card:hover .module-icon {
+            transform: scale(1.1);
+        }
+        .main-wrapper { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            width: 100%; 
+            box-sizing: border-box; 
+            padding: 2rem 1rem; 
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Check for session token to protect page
+        if(sessionStorage.getItem('navis_logged_in') !== 'true') { window.location.href = 'login.html'; }
+        
+        // Manages theme persistence identically to the dashboard
+        const savedTheme = localStorage.getItem('navis_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <div class="portfolio-banner">🔴 VISUALIZZAZIONE PORTFOLIO - Selezione Applicativo 🔴</div>
+
+    <nav class="navbar navbar-expand-xl navbar-dark mb-4 px-4 sticky-top">
+        <div class="container-fluid position-relative d-flex justify-content-center">
+            <span class="navbar-brand mb-0 h4 m-0 fw-bold d-flex align-items-center">
+                <i class="fas fa-compass" style="color:#ffffff;margin-right:8px"></i>Ecosistema NAVIS
+            </span>
+            <div class="position-absolute end-0 pe-4 d-flex align-items-center">
+                <button onclick="logout()" class="btn btn-sm btn-outline-danger shadow-sm fw-bold" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="text-center mb-5">
+            <h2><i class="fas fa-th-large" style="color:var(--petronas-cyan); margin-right:8px"></i> Portale di Accesso</h2>
+            <p class="text-muted fs-5 mb-1">Seleziona l'ambiente operativo desiderato per continuare.</p>
+        </div>
+        
+        <div class="container">
+            <div class="row justify-content-center row-cols-1 row-cols-md-2 g-4" style="max-width: 900px; margin: 0 auto;">
+                
+                <!-- Card 1: Dashboard NAVIS -->
+                <div class="col">
+                    <a href="dashboard_NAVIS.html" class="card h-100 text-center shadow-sm" style="min-height: 240px;">
+                        <div class="card-body py-5 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fas fa-chart-line module-icon mt-2"></i>
+                            <h4 class="mt-4 mb-2 fw-bold" style="color:var(--text-color)">Dashboard NAVIS</h4>
+                            <p class="text-muted mb-0 mx-3">Dashboard aziendale interattiva per il monitoraggio e la gestione dei processi produttivi.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Card 2: Dashboard Fleet -->
+                <div class="col">
+                    <a href="dashboard_Fleet.html" class="card h-100 text-center shadow-sm" style="min-height: 240px;">
+                        <div class="card-body py-5 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fas fa-tablet-alt module-icon mt-2"></i>
+                            <h4 class="mt-4 mb-2 fw-bold" style="color:var(--text-color)">Dashboard Fleet</h4>
+                            <p class="text-muted mb-0 mx-3">Pannello MDM per la gestione dei dispositivi fisici aziendali configurati in modalità Kiosk.</p>
+                        </div>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center mt-auto mb-4 text-muted" style="font-size:0.85em">
+        &copy; Sviluppato da Emanuele Cazzola e Andrea Volpe<br>
+        <i>Riproduzione riservata. Interfaccia anonimizzata ad uso esclusivo di portfolio.</i>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function logout() { sessionStorage.removeItem('navis_logged_in'); window.location.href='login.html'; }
+    </script>
+</body>
+</html>
