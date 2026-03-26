@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Manager - Portfolio Mock</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Variabili Tema (Light / Dark) */
+        :root {
+            --bg-color: #f4f6f8;
+            --text-color: #101820;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --muted-text: #6c757d;
+            --header-bg: #f8f9fa;
+            --table-header-bg: #f1f3f5;
+            --petronas-cyan: #00D2BE;
+            --petronas-cyan-hover: #00b8a6;
+            --badge-bg: #e6f9f7;
+            --badge-text: #008f81;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --border-color: #333333;
+            --muted-text: #9aa8b5;
+            --header-bg: #1a1a1a;
+            --table-header-bg: #252525;
+            --badge-bg: #003330;
+            --badge-text: #00D2BE;
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar { background: linear-gradient(90deg, #101820 0%, #202c39 100%); border-bottom: 3px solid var(--petronas-cyan); }
+        
+        .card { 
+            background-color: var(--card-bg); 
+            color: var(--text-color);
+            border: 1px solid var(--border-color); 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s; 
+            border-top: 4px solid var(--petronas-cyan); 
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.15); }
+        
+        .stat-card { border-top: none; border-left: 4px solid var(--petronas-cyan); cursor: pointer; }
+        .stat-card.active { box-shadow: 0 0 0 2px var(--petronas-cyan), 0 8px 16px rgba(0,0,0,0.15) !important; transform: translateY(-3px) scale(1.02); background-color: var(--header-bg); }
+        .stat-card.active-online { box-shadow: 0 0 0 2px #00e676, 0 8px 16px rgba(0,0,0,0.15) !important; }
+        .stat-card.active-offline { box-shadow: 0 0 0 2px #ff5252, 0 8px 16px rgba(0,0,0,0.15) !important; }
+        .stat-card.active-battery { box-shadow: 0 0 0 2px #ff9800, 0 8px 16px rgba(0,0,0,0.15) !important; }
+        
+        .stat-card h5 { color: var(--muted-text); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card h2 { margin: 0; font-weight: 700; color: var(--text-color); }
+        
+        .status-badge { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+        .online { background-color: #00e676; box-shadow: 0 0 8px rgba(0,230,118,0.4); }
+        .offline { background-color: #ff5252; }
+        
+        .table-container { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; transition: 0.3s; }
+        .table { color: var(--text-color); }
+        .table-hover tbody tr:hover { background-color: rgba(0, 210, 190, 0.05); color: var(--text-color); }
+        .table thead { background-color: var(--header-bg); }
+        .table th { font-weight: 600; color: var(--muted-text); border-bottom: 2px solid var(--border-color); }
+        .table td { border-color: var(--border-color); }
+        
+        .version-tag { font-family: monospace; background: var(--badge-bg); color: var(--badge-text); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; font-weight: bold; }
+        .build-tag { font-family: monospace; color: var(--muted-text); font-size: 0.85em; }
+        /* Custom over-rides per Dark Mode */
+        .text-muted { color: var(--muted-text) !important; }
+        .text-white { color: #fff !important; }
+
+        .d-none { display: none !important; }
+        .portfolio-banner { background-color: #f57c00; color: white; text-align: center; padding: 5px; font-weight: bold; font-size: 0.9em; }
+        
+        .btn-action-primary { background-color: var(--petronas-cyan); color: #000; border: none; font-weight: 500; transition: background-color 0.2s; }
+        .btn-action-primary:hover { background-color: var(--petronas-cyan-hover); color: #000; }
+
+        .reparto-header { color: var(--text-color); border-bottom: 3px solid var(--petronas-cyan); padding-bottom: 5px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; font-size: 1.2rem; margin: 0; transition: 0.3s; }
+        .cursor-pointer { cursor: pointer; user-select: none; }
+        .cursor-pointer:hover .reparto-header { color: var(--petronas-cyan); }
+        .table-header-row { background-color: var(--table-header-bg) !important; color: var(--text-color); transition: 0.3s; }
+        .table-header-row:hover { filter: brightness(0.95); }
+
+        /* Input di ricerca */
+        .search-input { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 30px; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .search-input:focus { outline: none; border-color: var(--petronas-cyan); box-shadow: 0 0 0 3px rgba(0,210,190,0.2); }
+        .search-input::placeholder { color: var(--muted-text) !important; opacity: 1; }
+
+        /* Toast UI personalizzata */
+        .custom-toast {
+            position: fixed; bottom: 20px; right: 20px;
+            background-color: #101820; color: white;
+            padding: 15px 20px; border-radius: 8px;
+            border-left: 4px solid var(--petronas-cyan);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 1050; display: flex; align-items: center; gap: 15px;
+            transform: translateY(100px); opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <script>
+        // Check login e tema iniziale
+        if(sessionStorage.getItem('fleet_logged_in') !== 'true') { window.location.href = 'login.html'; }
+        const savedTheme = localStorage.getItem('fleet_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <div class="portfolio-banner">🔴 VISUALIZZAZIONE PORTFOLIO - Demo Interattiva Front-End 🔴</div>
+
+    <nav class="navbar navbar-dark mb-4 px-3 d-flex justify-content-between align-items-center">
+        <span class="navbar-brand mb-0 h1"><i class="fas fa-ship" style="color: var(--petronas-cyan); margin-right: 8px;"></i> FLEET MANAGER</span>
+        
+        <div class="d-flex gap-2 align-items-center">
+            <button class="btn btn-outline-light btn-sm" onclick="toggleTheme()" title="Cambia Tema Giorno/Notte">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+            <div class="vr bg-light mx-2" style="opacity: 0.5; height: 20px;"></div>
+            <div class="btn-group" role="group" aria-label="Cambio Vista">
+                <button type="button" class="btn btn-outline-light btn-sm active" id="btn-grid" onclick="switchView('grid')"><i class="fas fa-th-large"></i> Griglia</button>
+                <button type="button" class="btn btn-outline-light btn-sm" id="btn-list" onclick="switchView('list')"><i class="fas fa-list"></i> Tabella</button>
+            </div>
+            <div class="vr bg-light mx-2" style="opacity: 0.5; height: 20px;"></div>
+            <button onclick="logout()" class="btn btn-sm btn-danger fw-bold" title="Logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+
+        <!-- KPI STATS ROW (Cliccabili come filtri) -->
+        <h6 class="text-muted mb-3"><i class="fas fa-filter"></i> Filtri Rapidi (Clicca per applicare)</h6>
+        <div class="row mb-4">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card stat-card h-100 active" id="card-all" onclick="setKpiFilter('all')">
+                    <div class="card-body">
+                        <h5>Totale Flotta</h5>
+                        <h2 id="kpi-total">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card stat-card h-100" id="card-online" onclick="setKpiFilter('online')" style="border-left-color: #00e676;">
+                    <div class="card-body">
+                        <h5>Dispositivi Online</h5>
+                        <h2 id="kpi-online" style="color: #00e676;">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card stat-card h-100" id="card-offline" onclick="setKpiFilter('offline')" style="border-left-color: #ff5252;">
+                    <div class="card-body">
+                        <h5>Dispositivi Offline</h5>
+                        <h2 id="kpi-offline" style="color: #ff5252;">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card stat-card h-100" id="card-battery" onclick="setKpiFilter('battery')" style="border-left-color: #ff9800;">
+                    <div class="card-body">
+                        <h5>Batteria Critica</h5>
+                        <h2 id="kpi-battery" style="color: #ff9800;">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="mb-4 position-relative">
+            <i class="fas fa-search position-absolute text-muted" style="top: 14px; left: 15px;"></i>
+            <input type="text" id="searchInput" class="form-control search-input" style="padding-left: 45px;" placeholder="Cerca dispositivo per modello, seriale o IP..." onkeyup="handleSearch()">
+        </div>
+        
+        <!-- VISTA GRIGLIA -->
+        <div id="view-grid" class="row"></div>
+
+        <!-- VISTA TABELLA -->
+        <div id="view-list" class="table-container d-none mt-3">
+            <div class="p-3 border-bottom" style="background-color: var(--header-bg); border-color: var(--border-color) !important;">
+                <h5 class="m-0" style="color: var(--text-color);"><i class="fas fa-server me-2"></i>Riepilogo Flotta Completa</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Stato</th>
+                            <th>Dispositivo</th>
+                            <th>Software Ver.</th>
+                            <th>Build Num.</th>
+                            <th>Batteria</th>
+                            <th>IP Address</th>
+                            <th>Ultimo Contatto</th>
+                            <th class="text-end pe-4">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <footer class="text-center mt-5 mb-4 text-muted" style="font-size: 0.85em;">
+        &copy; Sviluppato da Emanuele Cazzola e Andrea Volpe <br>
+        <i>Riproduzione riservata. Interfaccia anonimizzata ad uso esclusivo di portfolio.</i>
+    </footer>
+
+    <script>
+        // MOCK DATA
+        const mockDevices = [];
+        const configReparti = [
+            { nome: 'Reparto 1 - Logistica', count: 10 },
+            { nome: 'Reparto 2 - Vendite', count: 10 },
+            { nome: 'Reparto 3 - Magazzino A', count: 5 },
+            { nome: 'Reparto 4 - Magazzino B', count: 5 }
+        ];
+
+        let idCounter = 1;
+        configReparti.forEach(rep => {
+            for(let i=0; i<rep.count; i++) {
+                const isOnline = Math.random() > 0.15; // 85% online
+                mockDevices.push({
+                    serial_id: "SN-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
+                    reparto: rep.nome,
+                    is_online: isOnline,
+                    model: "Pad Pro AMG " + (Math.floor(Math.random() * 3) + 1),
+                    ip_address: `10.0.${idCounter < 15 ? 1 : 2}.${10 + idCounter}`,
+                    app_version: Math.random() > 0.3 ? "3.0.1" : "2.9.8",
+                    build_number: Math.random() > 0.3 ? "105" : "92",
+                    battery_level: Math.floor(Math.random() * 95) + 5,
+                    last_seen_str: isOnline ? `${Math.floor(Math.random() * 45) + 1} sec fa` : `${Math.floor(Math.random() * 12) + 1} ore fa`,
+                    pending_command: null
+                });
+                idCounter++;
+            }
+        });
+
+        // Stato della pagina
+        const collapsedSections = {};
+        let currentSearchQuery = "";
+        let currentKpiFilter = "all";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDashboard();
+            const savedView = localStorage.getItem('fleet_view_mode') || 'grid';
+            switchView(savedView);
+            updateThemeIcon();
+        });
+
+        function logout() {
+            sessionStorage.removeItem('fleet_logged_in');
+            window.location.href = 'login.html';
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('fleet_theme', newTheme);
+            updateThemeIcon();
+            showToast('Tema Aggiornato', `Passato alla modalità ${newTheme === 'dark' ? 'Scura' : 'Chiara'}`, 'info');
+        }
+
+        function updateThemeIcon() {
+            const icon = document.getElementById('theme-icon');
+            if(document.documentElement.getAttribute('data-theme') === 'dark') {
+                icon.className = 'fas fa-sun';
+                icon.style.color = '#ffeb3b';
+            } else {
+                icon.className = 'fas fa-moon';
+                icon.style.color = '';
+            }
+        }
+
+        function switchView(viewName) {
+            localStorage.setItem('fleet_view_mode', viewName);
+            document.getElementById('view-grid').classList.toggle('d-none', viewName !== 'grid');
+            document.getElementById('view-list').classList.toggle('d-none', viewName !== 'list');
+            document.getElementById('btn-grid').classList.toggle('active', viewName === 'grid');
+            document.getElementById('btn-list').classList.toggle('active', viewName === 'list');
+        }
+
+        function toggleSection(safeID) {
+            collapsedSections[safeID] = !collapsedSections[safeID];
+            renderDashboard();
+        }
+
+        function handleSearch() {
+            currentSearchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderDashboard();
+        }
+
+        function setKpiFilter(filter) {
+            currentKpiFilter = filter;
+            
+            // Rimuovo classi attive vecchie
+            ['all', 'online', 'offline', 'battery'].forEach(m => {
+                document.getElementById('card-' + m).classList.remove('active', 'active-online', 'active-offline', 'active-battery');
+            });
+            
+            // Aggiungo classe attiva specifica per dare feedback cromatico corretto
+            const cardEl = document.getElementById('card-' + filter);
+            if(filter === 'all') cardEl.classList.add('active');
+            else if(filter === 'online') cardEl.classList.add('active-online');
+            else if(filter === 'offline') cardEl.classList.add('active-offline');
+            else if(filter === 'battery') cardEl.classList.add('active-battery');
+            
+            renderDashboard();
+            
+            let msg = filter === 'all' ? 'Tutti i dispositivi mostrati' : (filter === 'battery' ? 'Dispositivi con batteria < 20%' : 'Solo dispositivi ' + filter);
+            showToast('Filtro Applicato', msg, 'info');
+        }
+
+        function showToast(title, message, type='success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'custom-toast';
+            const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
+            
+            toast.innerHTML = `
+                <i class="fas ${iconClass} fs-4" style="color: var(--petronas-cyan);"></i>
+                <div style="flex-grow: 1;">
+                    <div style="font-weight: bold; margin-bottom: 2px;">${title}</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">${message}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400); 
+            }, 4000);
+        }
+
+        function inviaComando(serialId, command) {
+            const device = mockDevices.find(d => d.serial_id === serialId);
+            if(device) {
+                device.pending_command = "Elab: " + command;
+                renderDashboard();
+                showToast('Comando Inviato', `Azione [${command}] inoltrata a ${serialId}.`);
+                
+                setTimeout(() => {
+                    device.pending_command = null;
+                    if(command === 'DEPLOY') { device.app_version = "3.1.0"; device.build_number = "110"; }
+                    if(command === 'RESTART') { device.is_online = false; device.last_seen_str = "Riavviando..."; }
+                    renderDashboard();
+                    showToast('Comando Completato', `Esecuzione terminata per ${serialId}.`);
+                }, 2000);
+            }
+        }
+
+        function renderDashboard() {
+            const gridContainer = document.getElementById('view-grid');
+            const tableBody = document.getElementById('table-body');
+            
+            gridContainer.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            // Step 1: Filtro di ricerca testuale per tutto il mock (serve per contare i KPI in alto a prescindere dal click della card)
+            const textFilteredOnly = mockDevices.filter(d => 
+                d.model.toLowerCase().includes(currentSearchQuery) || 
+                d.serial_id.toLowerCase().includes(currentSearchQuery) ||
+                d.ip_address.includes(currentSearchQuery)
+            );
+
+            // Aggiornamento testuale KPI Cards (Mostrano i numeri in base alla ricerca testo)
+            document.getElementById('kpi-total').innerText = textFilteredOnly.length;
+            document.getElementById('kpi-online').innerText = textFilteredOnly.filter(d => d.is_online).length;
+            document.getElementById('kpi-offline').innerText = textFilteredOnly.filter(d => !d.is_online).length;
+            document.getElementById('kpi-battery').innerText = textFilteredOnly.filter(d => d.battery_level < 20).length;
+
+            // Step 2: Filtro finale VISIVO basato sul click della Card KPI
+            let finalFiltered = textFilteredOnly;
+            if(currentKpiFilter === 'online') finalFiltered = textFilteredOnly.filter(d => d.is_online);
+            else if(currentKpiFilter === 'offline') finalFiltered = textFilteredOnly.filter(d => !d.is_online);
+            else if(currentKpiFilter === 'battery') finalFiltered = textFilteredOnly.filter(d => d.battery_level < 20);
+
+            if (finalFiltered.length === 0) {
+                gridContainer.innerHTML = '<div class="col-12 text-center text-muted py-5"><h4><i class="fas fa-search me-2"></i> Nessun dispositivo trovato con i filtri attuali.</h4></div>';
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Nessun dispositivo trovato con i filtri attuali</td></tr>';
+                return;
+            }
+
+            // Raggruppamento
+            const dispositiviPerReparto = {};
+            finalFiltered.forEach(d => {
+                if(!dispositiviPerReparto[d.reparto]) dispositiviPerReparto[d.reparto] = [];
+                dispositiviPerReparto[d.reparto].push(d);
+            });
+
+            // Scrittura HTML
+            Object.keys(dispositiviPerReparto).forEach(reparto => {
+                const dispositivi = dispositiviPerReparto[reparto];
+                const safeID = reparto.replace(/[^a-zA-Z0-9]/g, '');
+                const isCollapsed = collapsedSections[safeID] || false;
+                const iconClass = isCollapsed ? 'fa-chevron-down' : 'fa-chevron-up';
+
+                // GRIGLIA -> Intestazione
+                gridContainer.insertAdjacentHTML('beforeend', `
+                    <div class="col-12 mt-4 mb-3 cursor-pointer" onclick="toggleSection('${safeID}')">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2" style="border-color: var(--petronas-cyan) !important;">
+                            <h4 class="reparto-header border-0 m-0 p-0"><i class="fas fa-layer-group" style="color:var(--petronas-cyan)"></i> ${reparto} <span class="badge bg-secondary ms-2 rounded-pill shadow-sm" style="font-size: 0.6em; vertical-align: middle;">${dispositivi.length} Device</span></h4>
+                            <i class="fas ${iconClass} text-muted"></i>
+                        </div>
+                    </div>
+                `);
+
+                // TABELLA -> Intestazione
+                tableBody.insertAdjacentHTML('beforeend', `
+                    <tr class="table-header-row cursor-pointer" onclick="toggleSection('${safeID}')">
+                        <td colspan="8">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong class="text-uppercase" style="border-left: 4px solid var(--petronas-cyan); padding-left: 8px;">
+                                    <i class="fas fa-folder-open me-2" style="color:var(--petronas-cyan)"></i> ${reparto} 
+                                    <span class="badge bg-secondary ms-2 rounded-pill shadow-sm">${dispositivi.length}</span>
+                                </strong>
+                                <i class="fas ${iconClass} text-muted"></i>
+                            </div>
+                        </td>
+                    </tr>
+                `);
+
+                if(!isCollapsed) {
+                    // Contenitore Row Griglia
+                    const gridRowContainerId = 'grid-row-' + safeID;
+                    gridContainer.insertAdjacentHTML('beforeend', `<div class="row w-100 m-0 p-0" id="${gridRowContainerId}"></div>`);
+                    const rowContainer = document.getElementById(gridRowContainerId);
+
+                    dispositivi.forEach(device => {
+                        // Badge, Colori e Icone
+                        const statusStr = device.is_online ? 'online' : 'offline';
+                        let batteryClass = 'bg-danger'; let batteryTextClass = 'text-danger'; let batteryIcon = 'quarter';
+                        
+                        if (device.battery_level > 50) { batteryClass = 'bg-success'; batteryTextClass = 'text-success'; } 
+                        else if (device.battery_level > 20) { batteryClass = 'bg-warning'; batteryTextClass = 'text-warning'; }
+                        
+                        if (device.battery_level > 80) batteryIcon = 'full'; else if (device.battery_level > 30) batteryIcon = 'half';
+
+                        const pendingHtml = device.pending_command ? 
+                            `<div class="mt-2 text-center small p-1 rounded" style="background-color:var(--petronas-cyan); color:#101820; font-weight:bold;">
+                                <i class="fas fa-cog fa-spin"></i> ${device.pending_command}
+                            </div>` : '';
+
+                        // DOM Griglia
+                        rowContainer.insertAdjacentHTML('beforeend', `
+                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="card-title m-0 fw-bold">
+                                            <span class="status-badge ${statusStr}"></span> ${device.model}
+                                        </h6>
+                                        <span class="badge bg-secondary text-white border shadow-sm">${device.last_seen_str}</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p class="text-muted small mb-1">SN: <span class="font-monospace">${device.serial_id}</span></p>
+                                        <p class="text-muted small mb-1">Rete: ${device.ip_address}</p>
+                                        <p class="small mb-0 mt-2 p-2 rounded border" style="background-color: var(--bg-color); border-color: var(--border-color)!important;">
+                                            Sw. Ver: <span class="version-tag">${device.app_version}</span> <span class="build-tag">(b.${device.build_number})</span>
+                                        </p>
+                                    </div>
+                                    <div class="progress mb-3" style="height: 12px; border-radius: 6px; background-color: var(--bg-color);">
+                                        <div class="progress-bar ${batteryClass}" role="progressbar" style="width: ${device.battery_level}%">${device.battery_level}%</div>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <div class="btn-group">
+                                            <button onclick="inviaComando('${device.serial_id}', 'PING')" class="btn btn-outline-secondary btn-sm" style="color:var(--text-color); border-color:var(--border-color);"><i class="fas fa-satellite-dish"></i> Ping</button>
+                                            <button onclick="inviaComando('${device.serial_id}', 'WAKE')" class="btn btn-action-primary btn-sm"><i class="fas fa-desktop"></i> Wake</button>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button onclick="inviaComando('${device.serial_id}', 'RESTART')" class="btn btn-outline-danger btn-sm"><i class="fas fa-redo"></i> Riavvia Term.</button>
+                                            <button onclick="inviaComando('${device.serial_id}', 'DEPLOY')" class="btn btn-dark btn-sm shadow-sm" style="background:#101820; color:white; border-left: 2px solid var(--petronas-cyan);"><i class="fas fa-upload" style="color:var(--petronas-cyan)"></i> Deploy</button>
+                                        </div>
+                                    </div>
+                                    ${pendingHtml}
+                                </div>
+                            </div>
+                        </div>`);
+
+                        // DOM Tabella
+                        tableBody.insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td class="ps-4"><span class="status-badge ${statusStr}"></span></td>
+                            <td class="fw-bold">${device.model} <br> <small class="text-muted font-monospace" style="font-size: 0.75em;">${device.serial_id}</small></td>
+                            <td><span class="version-tag">${device.app_version}</span></td>
+                            <td><span class="build-tag fw-bold">${device.build_number}</span></td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-battery-${batteryIcon} me-2 ${batteryTextClass}"></i>
+                                    ${device.battery_level}%
+                                </div>
+                            </td>
+                            <td class="font-monospace small text-muted">${device.ip_address}</td>
+                            <td class="small text-muted">${device.last_seen_str} ${device.pending_command ? '<i class="fas fa-cog fa-spin ms-2" style="color:var(--petronas-cyan);"></i>' : ''}</td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group shadow-sm">
+                                    <button onclick="inviaComando('${device.serial_id}', 'WAKE')" class="btn btn-sm btn-action-primary" title="Wake"><i class="fas fa-desktop"></i></button>
+                                    <button onclick="inviaComando('${device.serial_id}', 'PING')" class="btn btn-sm btn-outline-secondary" style="border-color:var(--border-color);" title="Ping"><i class="fas fa-satellite-dish" style="color:var(--text-color);"></i></button>
+                                    <button onclick="inviaComando('${device.serial_id}', 'RESTART')" class="btn btn-sm btn-outline-danger" title="Restart"><i class="fas fa-redo"></i></button>
+                                    <button onclick="inviaComando('${device.serial_id}', 'DEPLOY')" class="btn btn-sm btn-dark" style="background:#101820; border-left: 2px solid var(--petronas-cyan);" title="Deploy Profiles"><i class="fas fa-upload" style="color:var(--petronas-cyan)"></i></button>
+                                </div>
+                            </td>
+                        </tr>`);
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
