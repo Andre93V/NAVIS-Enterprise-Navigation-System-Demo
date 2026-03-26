@@ -1,5 +1,9 @@
 <div align="center">
-  <h1>🏭 NAVIS</h1>
+  <h1 style="display: flex; align-items: center; gap: 10px;">
+  <span>🏭</span>
+  <i class="fas fa-compass" style="color: var(--petronas-cyan);"></i> 
+  NAVIS
+  </h1>
   <h3>Executive Summary &bull; Digitalizzazione e Controllo di Produzione</h3>
   <br>
   <em>"Trasformare la complessità della fabbrica in decisioni chiare e tempestive, supportando realmente gli operatori."</em>
