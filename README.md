@@ -25,7 +25,7 @@ NAVIS è la risposta a questa esigenza vitale: un **Hub Operativo Centralizzato*
 
 👉 **Progettato col reparto, per il reparto**
 
-### 4. Moltiplicatore di Valore: Benefici & Continuità
+### 4. Benefici & Continuità
 L'inserimento a sistema genera tre vantaggi strategici chiari:
 * ⏱️ **Riduzione dei Fermi Macchina:** La dichiarazione e la classificazione degli stop produttivi è istantanea, abbattendo attivamente l'inattività tramite una tracciabilità misurabile.
 * 📊 **Produttività & OEE:** Traduzione diretta in una maggiore resa produttiva (*throughput*) senza la necessità di nuovi macchinari.
