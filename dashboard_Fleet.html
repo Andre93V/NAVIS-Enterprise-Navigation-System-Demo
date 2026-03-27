@@ -116,7 +116,7 @@
     <script>
         // Check login e tema iniziale
         if(sessionStorage.getItem('is_logged_in') !== 'true') { window.location.href = 'login.html'; }
-        const savedTheme = localStorage.getItem('fleet_theme') || 'light';
+        const savedTheme = localStorage.getItem('navis_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 
@@ -277,7 +277,7 @@
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('fleet_theme', newTheme);
+            localStorage.setItem('navis_theme', newTheme);
             updateThemeIcon();
             showToast('Tema Aggiornato', `Passato alla modalità ${newTheme === 'dark' ? 'Scura' : 'Chiara'}`, 'info');
         }
